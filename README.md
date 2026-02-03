@@ -19,7 +19,7 @@ Generate solvable Rush Hour sliding block puzzles with customizable car configur
 
 ## Live Demo
 
-[Play the generator here](https://gomleksizoglu.github.io/rush-hour-gen/)
+[Play the generator here](https://gomleksiz.github.io/rush-hour-gen/)
 
 ## Usage
 
