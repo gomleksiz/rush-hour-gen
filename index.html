@@ -242,10 +242,11 @@
         .difficulty.hard { background: #FF2D55; box-shadow: 0 3px 0 #d4264a; }
 
         .moves-info {
-            font-size: 0.8rem;
-            color: #666;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #444;
             text-align: center;
-            margin-top: 0.3rem;
+            margin-top: 0.5rem;
             position: relative;
             z-index: 1;
         }
@@ -384,15 +385,15 @@
         }
 
         .card-footer .qr-container {
-            width: 40px;
-            height: 40px;
+            width: 64px;
+            height: 64px;
             flex-shrink: 0;
         }
 
         .card-footer .qr-container img,
         .card-footer .qr-container canvas {
-            width: 40px !important;
-            height: 40px !important;
+            width: 64px !important;
+            height: 64px !important;
             image-rendering: pixelated;
         }
 
@@ -810,10 +811,6 @@ function renderCard(puzzle, cardNum) {
             <div class="exit-arrow"></div>
         </div>
         <div class="moves-info">Min. moves: ${moves}</div>
-        <div class="legend">
-            <div class="legend-title">Move RED car to exit &rarr;</div>
-            <div class="legend-items"></div>
-        </div>
         <div class="card-footer">
             <div class="qr-container"></div>
             <a href="https://gomleksiz.github.io/rush-hour-gen/">gomleksiz.github.io/rush-hour-gen</a>
@@ -881,15 +878,6 @@ function renderCard(puzzle, cardNum) {
         }
 
         gridInner.appendChild(div);
-    });
-
-    // Legend
-    const legendItems = card.querySelector('.legend-items');
-    cars.forEach((car, i) => {
-        const item = document.createElement('div');
-        item.className = 'legend-item';
-        item.innerHTML = `<div class="legend-swatch" style="background:${carSwatches[i]}"></div><span>${labels[i]} (${car.length === 2 ? '2' : '3'})</span>`;
-        legendItems.appendChild(item);
     });
 
     // QR code
