@@ -371,12 +371,82 @@
         }
 
         @media print {
-            body { background: white; padding: 0.5rem; }
+            body { background: white; padding: 0; margin: 0; }
             body::before { display: none; }
-            header, .controls, .config-panel { display: none; }
-            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-            .puzzle-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; padding: 1rem; }
+            header, .controls, .config-panel, .print-btn { display: none; }
+            .container { padding: 0; max-width: none; }
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+                height: 100vh;
+                grid-template-rows: 1fr 1fr;
+            }
+            .puzzle-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 0.5rem;
+                border-radius: 10px;
+                font-size: 0.85em;
+            }
+            .puzzle-card::before { top: 4px; left: 4px; right: 4px; bottom: 4px; }
+            .card-header { margin-bottom: 0.25rem; }
+            .puzzle-grid-container { margin: 0.25rem 0; }
+            .legend { margin-top: 0.25rem; gap: 0.25rem; }
             .exit-arrow { animation: none; }
+
+            /* B&W patterns for cars */
+            .car {
+                background: white !important;
+                color: black !important;
+                text-shadow: none !important;
+                box-shadow: none !important;
+                border: 1.5px solid #333 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .car-red {
+                background: repeating-linear-gradient(
+                    45deg, #999, #999 3px, white 3px, white 6px
+                ) !important;
+            }
+            .pat-hstripe { background: repeating-linear-gradient(
+                0deg, #aaa, #aaa 2px, white 2px, white 5px) !important; }
+            .pat-vstripe { background: repeating-linear-gradient(
+                90deg, #aaa, #aaa 2px, white 2px, white 5px) !important; }
+            .pat-dots { background: radial-gradient(circle, #888 1.5px, transparent 1.5px) !important;
+                background-size: 6px 6px !important; }
+            .pat-cross { background:
+                repeating-linear-gradient(0deg, transparent, transparent 4px, #aaa 4px, #aaa 5px),
+                repeating-linear-gradient(90deg, transparent, transparent 4px, #aaa 4px, #aaa 5px) !important; }
+            .pat-diag { background: repeating-linear-gradient(
+                45deg, #aaa, #aaa 2px, white 2px, white 6px) !important; }
+            .pat-diag2 { background: repeating-linear-gradient(
+                -45deg, #aaa, #aaa 2px, white 2px, white 6px) !important; }
+            .pat-checker { background: repeating-conic-gradient(
+                #aaa 0% 25%, white 0% 50%) !important;
+                background-size: 6px 6px !important; }
+            .pat-dense { background: repeating-linear-gradient(
+                45deg, #bbb, #bbb 1px, white 1px, white 3px) !important; }
+            .pat-wide { background: repeating-linear-gradient(
+                0deg, #aaa, #aaa 3px, white 3px, white 8px) !important; }
+            .pat-diamond {
+                background:
+                    linear-gradient(45deg, #aaa 25%, transparent 25%),
+                    linear-gradient(-45deg, #aaa 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #aaa 75%),
+                    linear-gradient(-45deg, transparent 75%, #aaa 75%) !important;
+                background-size: 8px 8px !important;
+                background-position: 0 0, 0 4px, 4px -4px, -4px 0px !important;
+            }
+            .pat-zigzag { background: repeating-linear-gradient(
+                135deg, #aaa, #aaa 2px, white 2px, white 6px) !important; }
+            .pat-solid { background: #ccc !important; }
+
+            .legend-swatch {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
 
         @media (max-width: 768px) {
@@ -731,9 +801,14 @@ function renderCard(puzzle, cardNum) {
     // It's easier to use percentage + small offset for gaps.
     // Since gap is tiny (2px) relative to container, we use calc-based positioning.
 
+    const printPatterns = ['', 'pat-hstripe', 'pat-vstripe', 'pat-dots', 'pat-cross',
+        'pat-diag', 'pat-diag2', 'pat-checker', 'pat-dense', 'pat-wide',
+        'pat-diamond', 'pat-zigzag', 'pat-solid'];
+
     cars.forEach((car, i) => {
         const div = document.createElement('div');
-        div.className = 'car' + (i === 0 ? ' car-red' : '');
+        const patClass = i === 0 ? '' : (' ' + printPatterns[(i - 1) % printPatterns.length]);
+        div.className = 'car' + (i === 0 ? ' car-red' : '') + patClass;
 
         const gapPx = 2;
         // Use percentage for positioning: each cell slot is (100%/6)
