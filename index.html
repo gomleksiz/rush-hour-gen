@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #FF2D55;
@@ -368,6 +369,36 @@
             height: 16px;
             border-radius: 3px;
             border: 1.5px solid rgba(0,0,0,0.15);
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding-top: 0.4rem;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.6rem;
+            color: #888;
+        }
+
+        .card-footer .qr-container {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .card-footer .qr-container img,
+        .card-footer .qr-container canvas {
+            width: 40px !important;
+            height: 40px !important;
+            image-rendering: pixelated;
+        }
+
+        .card-footer a {
+            color: #888;
+            text-decoration: none;
         }
 
         @media print {
@@ -783,6 +814,10 @@ function renderCard(puzzle, cardNum) {
             <div class="legend-title">Move RED car to exit &rarr;</div>
             <div class="legend-items"></div>
         </div>
+        <div class="card-footer">
+            <div class="qr-container"></div>
+            <a href="https://gomleksiz.github.io/rush-hour-gen/">gomleksiz.github.io/rush-hour-gen</a>
+        </div>
     `;
 
     const gridInner = card.querySelector('.grid-inner');
@@ -855,6 +890,17 @@ function renderCard(puzzle, cardNum) {
         item.className = 'legend-item';
         item.innerHTML = `<div class="legend-swatch" style="background:${carSwatches[i]}"></div><span>${labels[i]} (${car.length === 2 ? '2' : '3'})</span>`;
         legendItems.appendChild(item);
+    });
+
+    // QR code
+    const qrContainer = card.querySelector('.qr-container');
+    new QRCode(qrContainer, {
+        text: 'https://gomleksiz.github.io/rush-hour-gen/',
+        width: 128,
+        height: 128,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.L
     });
 
     return card;
